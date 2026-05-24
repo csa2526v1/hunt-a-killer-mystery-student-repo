@@ -24,8 +24,11 @@ jobs:
 
       - name: Copy hidden grader files
         run: |
-          cp hidden-grader/GameResults.java src/test/java/GameResults.java
-          cp hidden-grader/AutoGraderTest.java src/test/java/AutoGraderTest.java
+          mkdir -p src/test/java
+          mkdir -p res
+          cp hidden-grader/src/test/java/GameResults.java src/test/java/GameResults.java
+          cp hidden-grader/src/test/java/AutoGraderTest.java src/test/java/AutoGraderTest.java
+          cp hidden-grader/res/*.in res/
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -33,5 +36,139 @@ jobs:
           distribution: 'temurin'
           java-version: '24'
 
-      - name: Run tests
-        run: mvn test
+      - name: LoginID Check
+        id: login-id
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: LoginID Check
+          command: mvn -q -Dtest=AutoGraderTest#loginIdExists test
+          timeout: 10
+          max-score: 1
+
+      - name: Question 1
+        id: question-1
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 1
+          command: mvn -q -Dtest=AutoGraderTest#question1 test
+          timeout: 10
+          max-score: 3
+
+      - name: Question 2
+        id: question-2
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 2
+          command: mvn -q -Dtest=AutoGraderTest#question2 test
+          timeout: 10
+          max-score: 3
+
+      - name: Question 3
+        id: question-3
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 3
+          command: mvn -q -Dtest=AutoGraderTest#question3 test
+          timeout: 10
+          max-score: 3
+
+      - name: Question 4
+        id: question-4
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 4
+          command: mvn -q -Dtest=AutoGraderTest#question4 test
+          timeout: 10
+          max-score: 3
+
+      - name: Question 5
+        id: question-5
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 5
+          command: mvn -q -Dtest=AutoGraderTest#question5 test
+          timeout: 10
+          max-score: 3
+
+      - name: Question 6
+        id: question-6
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 6
+          command: mvn -q -Dtest=AutoGraderTest#question6 test
+          timeout: 10
+          max-score: 6
+
+      - name: Question 7
+        id: question-7
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 7
+          command: mvn -q -Dtest=AutoGraderTest#question7 test
+          timeout: 10
+          max-score: 6
+
+      - name: Question 8
+        id: question-8
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 8
+          command: mvn -q -Dtest=AutoGraderTest#question8 test
+          timeout: 10
+          max-score: 6
+
+      - name: Question 9
+        id: question-9
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 9
+          command: mvn -q -Dtest=AutoGraderTest#question9 test
+          timeout: 10
+          max-score: 6
+
+      - name: Question 10
+        id: question-10
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 10
+          command: mvn -q -Dtest=AutoGraderTest#question10 test
+          timeout: 10
+          max-score: 5
+
+      - name: Question 11
+        id: question-11
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 11
+          command: mvn -q -Dtest=AutoGraderTest#question11 test
+          timeout: 10
+          max-score: 5
+
+      - name: Question 12
+        id: question-12
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: Question 12
+          command: mvn -q -Dtest=AutoGraderTest#question12 test
+          timeout: 10
+          max-score: 5
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          LOGIN-ID_RESULTS: "${{steps.login-id.outputs.result}}"
+          ANSWER-COUNT_RESULTS: "${{steps.answer-count.outputs.result}}"
+          QUESTION-1_RESULTS: "${{steps.question-1.outputs.result}}"
+          QUESTION-2_RESULTS: "${{steps.question-2.outputs.result}}"
+          QUESTION-3_RESULTS: "${{steps.question-3.outputs.result}}"
+          QUESTION-4_RESULTS: "${{steps.question-4.outputs.result}}"
+          QUESTION-5_RESULTS: "${{steps.question-5.outputs.result}}"
+          QUESTION-6_RESULTS: "${{steps.question-6.outputs.result}}"
+          QUESTION-7_RESULTS: "${{steps.question-7.outputs.result}}"
+          QUESTION-8_RESULTS: "${{steps.question-8.outputs.result}}"
+          QUESTION-9_RESULTS: "${{steps.question-9.outputs.result}}"
+          QUESTION-10_RESULTS: "${{steps.question-10.outputs.result}}"
+          QUESTION-11_RESULTS: "${{steps.question-11.outputs.result}}"
+          QUESTION-12_RESULTS: "${{steps.question-12.outputs.result}}"
+        with:
+          runners: login-id,answer-count,question-1,question-2,question-3,question-4,question-5,question-6,question-7,question-8,question-9,question-10,question-11,question-12
