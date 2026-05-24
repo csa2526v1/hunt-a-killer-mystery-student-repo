@@ -1,0 +1,37 @@
+name: Classroom Workflow
+
+on: [push]
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout student repo
+        uses: actions/checkout@v4
+
+      - name: Checkout hidden grader
+        uses: actions/checkout@v4
+        with:
+          repository: YOUR-ORG/murder-mystery-hidden-grader
+          path: hidden-grader
+          token: ${{ secrets.GRADER_REPO_TOKEN }}
+
+      - name: Copy hidden grader files
+        run: |
+          cp hidden-grader/GameResults.java src/test/java/GameResults.java
+          cp hidden-grader/AutoGraderTest.java src/test/java/AutoGraderTest.java
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '24'
+
+      - name: Run tests
+        run: mvn test
