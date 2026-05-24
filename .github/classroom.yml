@@ -18,7 +18,7 @@ jobs:
       - name: Checkout hidden grader
         uses: actions/checkout@v4
         with:
-          repository: YOUR-ORG/murder-mystery-hidden-grader
+          repository: YOUR-ORG/hunt-a-killer-mystery-hidden-grader
           path: hidden-grader
           token: ${{ secrets.GRADER_REPO_TOKEN }}
 
